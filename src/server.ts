@@ -8,8 +8,6 @@ import cors from 'cors';
 import { createServer } from 'http';
 import { Server as SocketIOServer } from 'socket.io';
 
-import { socketIOserver } from './socket.ts';
-
 import connectionDB from './backend/config/connection';
 import authRoute from './backend/routes/auth-route.ts';
 import userRoute from './backend/routes/user-routes.ts';

@@ -7,7 +7,7 @@ import { useUser } from '@/context/user-context';
 import getConvoList from '@/app/actions/get-convo-list';
 
 const ConvoCard = ({ search }: { search: string }) => {
-	const { receiverId, setReceiverId } = useUser();
+	const { setReceiverId } = useUser();
 	const { convoList, isLoading, error } = getConvoList();
 
 	const handleUrlChange = (receiverId: any) => {
@@ -41,18 +41,12 @@ const ConvoCard = ({ search }: { search: string }) => {
 		);
 	}
 
-	if (convoList.length === 0 && isLoading === false) {
-		return <div>No messages...</div>;
-	}
-
 	if (error) {
 		return <p>Error...</p>;
 	}
 
 	return (
-		<ScrollShadow
-			hideScrollBar
-			className='flex flex-col gap-1 overflow-scroll h-full'>
+		<>
 			{convoList
 				.filter((convoItem) =>
 					convoItem.participants[0].user?.fullName
@@ -63,77 +57,68 @@ const ConvoCard = ({ search }: { search: string }) => {
 				.map((convoItem) => {
 					return (
 						<div
+							key={convoItem._id}
 							onClick={() => {
 								const userId = convoItem.participants[0].user._id;
 								setReceiverId(userId);
 								handleUrlChange(userId);
 							}}
-							className={`flex items-center gap-5 text-black w-full cursor-pointer rounded-2xl hover:shadow-[10px_20px_60px_-1px_rgb(211,211,211)] duration-200 lg:p-5 p-2 border-b-1 ${
-								convoItem.lastMessage.status.isRead ? '' : 'bg-gray-200'
-							}`}
-							key={convoItem._id}>
-							<Avatar
-								showFallback
-								size='md'
-								src={
-									convoItem.participants[0].user.profilePicture ||
-									'https://i.pravatar.cc/150?u=a042581f4e29026024d'
-								}
-							/>
-							<div className='lg:flex hidden flex-col justify-center gap-1 w-[80%]'>
-								<div className='flex items-center justify-between'>
-									<h1 className='text-lg'>
-										{convoItem.participants[0].user.fullName}
-									</h1>
-									<h1 className='text-sm font-semibold'>
-										{DateFormatter(convoItem.lastMessageCreatedAt)}
-									</h1>
-								</div>
-								<p className='text-gray-500 text-xs w-[20rem] max-w-sm truncate overflow-hidden'>
+							className='flex items-center gap-4 w-full h-fit p-5 bg-white bg-opacity-10 rounded-2xl hover:bg-opacity-30 duration-200 cursor-pointer'>
+							<Badge
+								size='sm'
+								isOneChar
+								color='success'
+								placement='bottom-right'>
+								<Avatar
+									size='lg'
+									color='success'
+									radius='full'
+									src={
+										convoItem.participants[0].user.profilePicture ||
+										'https://i.pravatar.cc/150?u=a042581f4e29026024d'
+									}
+								/>
+							</Badge>
+							<div className='w-full'>
+								<h2 className='text-lg font-[400] tracking-wide text-white'>
+									{convoItem.participants[0].user.fullName}
+								</h2>
+								<p className='text-sm text-gray-300 truncate max-w-[80%]'>
 									{convoItem.lastMessage.message}
 								</p>
 							</div>
 						</div>
 					);
 				})}
-		</ScrollShadow>
+		</>
 	);
 };
 
 const Sidebar = React.memo(() => {
 	const [search, setSearch] = useState('');
-
 	return (
-		<aside className='border-r-[1px] border-gray-200 lg:h-[90%] h-[85%] text-black w-[20%] p-5 lg:pl-5 lg:pr-5 pl-1 pr-1 space-y-5'>
-			<div className='flex lg:flex-row flex-col lg:gap-0 gap-5 items-center justify-between'>
-				<h1 className='hidden lg:flex font-semibold text-2xl'>
-					Messages <strong className='font-medium text-lg'>(04)</strong>
-				</h1>
-
-				<div className='lg:hidden flex'>
-					<Badge
-						size='md'
-						color='danger'
-						content={1}
-						shape='circle'>
-						<i className='bx bx-message-square-dots bx-md'></i>
-					</Badge>
-				</div>
-
-				<i className='bx bx-edit bx-sm bx-border cursor-pointer hover:bg-gray-200 duration-200'></i>
+		<aside className='flex flex-col gap-5 w-[25%] h-full'>
+			<div className='flex items-center text-white'>
+				<h2 className='font-semibold text-2xl text-center text-white'>Messages</h2>
 			</div>
-			<div className='lg:flex hidden'>
-				<Input
-					value={search}
-					onChange={(e) => setSearch(e.target.value)}
-					radius='full'
-					className='capitalize'
-					placeholder='Search'
-					endContent={<i className='bx bx-search-alt-2 bx-sm text-gray-500'></i>}
-				/>
-			</div>
-
-			<ConvoCard search={search} />
+			<Input
+				value={search}
+				onChange={(e) => setSearch(e.target.value)}
+				classNames={{
+					inputWrapper:
+						'w-full h-fit p-5 rounded-full bg-white bg-opacity-10 group-hover:bg-opacity-20 focus:bg-opacity-0',
+				}}
+				startContent={
+					<i className='fa-solid fa-magnifying-glass fa-lg text-white mr-3'></i>
+				}
+				placeholder='Search'
+			/>
+			<ScrollShadow
+				hideScrollBar
+				size={10}
+				className='flex flex-col h-full gap-3 p-1 overflow-y-scroll'>
+				<ConvoCard search={search} />
+			</ScrollShadow>
 		</aside>
 	);
 });

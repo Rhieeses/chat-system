@@ -110,63 +110,30 @@ export default function SendMessageInput({ userSessionId, receiverId }: SendMess
 							<FormControl>
 								<Input
 									{...field}
-									className='flex grow w-full'
-									radius='md'
-									size='lg'
 									classNames={{
-										inputWrapper: 'bg-gray-300',
-										input: 'focus:bg-black ',
+										inputWrapper:
+											'w-full h-fit p-5 rounded-3xl bg-white bg-opacity-10 group-hover:bg-opacity-20 ',
+										input: 'text-lg',
 									}}
 									startContent={
-										<Dropdown
-											placement='top'
-											showArrow
-											classNames={{
-												base: 'before:bg-default-200', // change arrow background
-											}}>
-											<DropdownTrigger>
-												<i
-													className={`bx bx-happy-alt bx-sm  cursor-pointer transition-transform duration-500 ease-in-out pr-2`}></i>
-											</DropdownTrigger>
-											<DropdownMenu
-												aria-label='Dynamic Actions'
-												variant='faded'
-												className='grid grid-cols-4 gap-2 p-2 bg-white rounded shadow'>
-												{items.map((item) => (
-													<DropdownItem
-														key={item.key}
-														className='text-center p-2 bg-gray-100 hover:bg-gray-200 rounded'>
-														{item.label}
-													</DropdownItem>
-												))}
-											</DropdownMenu>
-										</Dropdown>
+										<i className='fa-solid fa-paperclip fa-lg text-white mr-3 '></i>
 									}
-									placeholder='Your message'
+									endContent={
+										<>
+											{message ? (
+												<i className='fa-regular fa-paper-plane fa-lg fa-2xl text-blue-500'></i>
+											) : (
+												<i className='fa-solid fa-thumbs-up fa-2xl text-blue-500'></i>
+											)}
+										</>
+									}
+									placeholder='Write a message...'
 								/>
 							</FormControl>
 							<FormMessage />
 						</FormItem>
 					)}
 				/>
-				<div className={`flex items-center gap-3`}>
-					{message ? (
-						<Button
-							type='submit'
-							variant='bordered'
-							className='font-semibold text-blue-500 border-none text-md'>
-							Send
-						</Button>
-					) : (
-						<div className='flex items-center gap-3 transition-[width] duration-200 ease-in-out'>
-							<i className='bx bx-paperclip bx-sm -rotate-[35deg]'></i>
-
-							<i className='bx bx-image-alt bx-sm cursor-pointer'></i>
-
-							<i className='bx bx-like bx-sm cursor-pointer'></i>
-						</div>
-					)}
-				</div>
 			</form>
 		</Form>
 	);

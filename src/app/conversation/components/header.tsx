@@ -12,7 +12,7 @@ import {
 import AddUserModal from './add-modal';
 import { useUser } from '@/context/user-context';
 
-const Header = React.memo(() => {
+const Header = () => {
 	const { user } = useUser();
 
 	const [isAddUserOpen, setIsAddUserOpen] = useState<boolean>(false);
@@ -20,69 +20,66 @@ const Header = React.memo(() => {
 	const handleOpenAdd = (value: boolean) => {
 		setIsAddUserOpen(value);
 	};
-
 	return (
-		<header className='p-5 pb-0 w-full h-fit'>
+		<header className='flex items-start justify-end w-full h-[9%] text-white'>
 			<AddUserModal
 				isAddUserOpen={isAddUserOpen}
 				handleOpenAdd={handleOpenAdd}
 			/>
-			<nav className='flex justify-end items-center gap-5 p-2'>
-				<i
-					onClick={() => handleOpenAdd(true)}
-					className='bx bx-user-plus bx-sm border-1 rounded-full p-2 bg-green-500 text-green-200 cursor-pointer hover:scale-105 duration-300'></i>
-
-				<i className='bx bx-calendar bx-sm'></i>
-				<i className='bx bx-bell bx-sm'></i>
-				<i className='bx bx-message-square-dots bx-sm'></i>
-
-				<Dropdown placement='bottom-end'>
-					<Badge
-						isOneChar
-						color='success'
-						content={<i className='fa-solid fa-circle text-green-500'></i>}
-						placement='bottom-right'>
-						<DropdownTrigger className='cursor-pointer'>
+			<div className='flex items-center w-[80%] justify-end gap-3'>
+				<div>
+					<i className='fa-solid fa-gear bg-white bg-opacity-10 rounded-full p-4 text-xl hover:bg-yellow-600 cursor-pointer duration-200' />
+				</div>
+				<div onClick={() => handleOpenAdd(true)}>
+					<i className='fa-solid fa-user-plus bg-white bg-opacity-10 rounded-full p-4 text-xl hover:bg-yellow-600 cursor-pointer duration-200' />
+				</div>
+				<div>
+					<Dropdown placement='bottom-end'>
+						<Badge
+							size='sm'
+							isOneChar
+							color='success'
+							placement='bottom-right'>
 							<Avatar
-								size='md'
+								size='lg'
 								color='success'
 								radius='full'
 								src={
 									user?.profilePicture || 'https://avatar.iran.liara.run/public/4'
 								}
 							/>
-						</DropdownTrigger>
-					</Badge>
-					<DropdownMenu
-						aria-label='Profile Actions'
-						variant='flat'>
-						<DropdownItem
-							key='profile'
-							className='h-9 gap-2'>
-							<p className='font-semibold'>{user?.email}</p>
-						</DropdownItem>
-						<DropdownItem
-							key='settings'
-							startContent={<i className='bx bx-cog bx-sm' />}>
-							<span>My Settings</span>
-						</DropdownItem>
-						<DropdownItem
-							key='help_and_feedback'
-							startContent={<i className='bx bx-help-circle bx-sm' />}>
-							<span>Help & Feedback</span>
-						</DropdownItem>
-						<DropdownItem
-							key='logout'
-							color='danger'
-							className='border-t-1 rounded-t-none'
-							startContent={<i className='bx bx-log-out bx-sm' />}>
-							<span>Log Out</span>
-						</DropdownItem>
-					</DropdownMenu>
-				</Dropdown>
-			</nav>
+						</Badge>
+
+						<DropdownMenu
+							aria-label='Profile Actions'
+							variant='flat'>
+							<DropdownItem
+								key='profile'
+								className='h-9 gap-2'>
+								<p className='font-semibold'>{user?.email}</p>
+							</DropdownItem>
+							<DropdownItem
+								key='settings'
+								startContent={<i className='bx bx-cog bx-sm' />}>
+								<span>My Settings</span>
+							</DropdownItem>
+							<DropdownItem
+								key='help_and_feedback'
+								startContent={<i className='bx bx-help-circle bx-sm' />}>
+								<span>Help & Feedback</span>
+							</DropdownItem>
+							<DropdownItem
+								key='logout'
+								color='danger'
+								className='border-t-1 rounded-t-none'
+								startContent={<i className='bx bx-log-out bx-sm' />}>
+								<span>Log Out</span>
+							</DropdownItem>
+						</DropdownMenu>
+					</Dropdown>
+				</div>
+			</div>
 		</header>
 	);
-});
-
+};
 export default Header;

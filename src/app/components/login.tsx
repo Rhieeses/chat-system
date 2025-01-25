@@ -85,8 +85,8 @@ export default function Login({ isLoginChange }: loginChangeProps) {
 	};
 
 	return (
-		<div className='flex flex-col gap-12 items-center justify-center p-5'>
-			<i className='bx bx-mail-send bx-lg duration-500 text-black'></i>
+		<div className='flex flex-col gap-5 items-center justify-center p-5'>
+			<i className='bx bxl-messenger text-7xl text-blue-500' />
 
 			<div className='text-center space-y-5'>
 				<h1 className='text-4xl font-bold tracking-wide'>Welcome back!</h1>

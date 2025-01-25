@@ -73,7 +73,7 @@ export default function SignUp({ isLoginChange }: loginChangeProps) {
 		setLoading(true);
 
 		try {
-			const signupResponse = await axios.post('/api/auth/signup', values);
+			await axios.post('/api/auth/signup', values);
 			setIsOpen(true);
 			setMessage('Sign up successful!');
 		} catch (err: any) {
@@ -111,7 +111,7 @@ export default function SignUp({ isLoginChange }: loginChangeProps) {
 		}
 	};
 	return (
-		<div className='flex flex-col gap-5 items-center justify-center lg:p-5 pt-0 p-5 overflow-hidden'>
+		<div className='flex flex-col gap-7 items-center justify-center lg:p-5 pt-0 p-5 overflow-hidden'>
 			<div className='flex flex-col gap-7 items-start w-full lg:w-[70%] w-full'>
 				<div className='flex items-center gap-4'>
 					<i className='bx bxs-magic-wand bx-md border-1 p-2 rounded-xl' />
@@ -127,18 +127,6 @@ export default function SignUp({ isLoginChange }: loginChangeProps) {
 						</div>
 					</div>
 				</div>
-				<Button
-					radius='lg'
-					variant='bordered'
-					size='lg'
-					startContent={<i className='bx bxl-google bx-sm text-blue-500'></i>}
-					className='w-full font-semibold p-7'>
-					Sign up with Google
-				</Button>
-				<div className='relative flex items-center justify-center w-full'>
-					<div className='absolute bottom-1/3 w-full border-t-2'></div>
-					<p className='bg-white p-2 pb-0 pt-0 z-10'>or</p>
-				</div>
 			</div>
 			<SuccessModal
 				openModal={isOpen}
@@ -150,37 +138,6 @@ export default function SignUp({ isLoginChange }: loginChangeProps) {
 					onSubmit={signUpForm.handleSubmit(onSubmitForm)}
 					className='lg:w-[70%] w-full'>
 					<section className='step-1 space-y-[2.7rem]'>
-						<FormField
-							control={signUpForm.control}
-							name='userName'
-							render={({ field }) => (
-								<FormItem>
-									<FormControl>
-										<Input
-											size='lg'
-											radius='md'
-											label='Username'
-											isRequired
-											labelPlacement='outside'
-											variant='bordered'
-											placeholder='Username'
-											classNames={{
-												inputWrapper:
-													'border-gray-400 bg-white border-1 p-8 text-black',
-												label: '!text-black pb-3',
-											}}
-											startContent={
-												<i className='bx bx-user bx-sm text-gray-500' />
-											}
-											{...field}
-										/>
-									</FormControl>
-									<p className='text-red-500'>{error.errorUsername}</p>
-
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
 						<FormField
 							control={signUpForm.control}
 							name='fullName'
@@ -210,37 +167,71 @@ export default function SignUp({ isLoginChange }: loginChangeProps) {
 								</FormItem>
 							)}
 						/>
+						<div className='grid grid-cols-2 gap-5'>
+							<FormField
+								control={signUpForm.control}
+								name='userName'
+								render={({ field }) => (
+									<FormItem>
+										<FormControl>
+											<Input
+												size='lg'
+												radius='md'
+												label='Username'
+												isRequired
+												labelPlacement='outside'
+												variant='bordered'
+												placeholder='Username'
+												classNames={{
+													inputWrapper:
+														'border-gray-400 bg-white border-1 p-8 text-black',
+													label: '!text-black pb-3',
+												}}
+												startContent={
+													<i className='bx bx-user bx-sm text-gray-500' />
+												}
+												{...field}
+											/>
+										</FormControl>
+										<p className='text-red-500'>{error.errorUsername}</p>
 
-						<FormField
-							control={signUpForm.control}
-							name='email'
-							render={({ field }) => (
-								<FormItem>
-									<FormControl>
-										<Input
-											size='lg'
-											radius='md'
-											label='Email'
-											isRequired
-											labelPlacement='outside'
-											variant='bordered'
-											placeholder='Email'
-											classNames={{
-												inputWrapper:
-													'border-gray-400 bg-white border-1 p-8 text-black',
-												label: '!text-black pb-3',
-											}}
-											startContent={
-												<i className='bx bx-envelope bx-sm text-gray-500' />
-											}
-											{...field}
-										/>
-									</FormControl>
-									<p className='text-red-500'>{error.errorEmail}</p>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+
+							<FormField
+								control={signUpForm.control}
+								name='email'
+								render={({ field }) => (
+									<FormItem>
+										<FormControl>
+											<Input
+												size='lg'
+												radius='md'
+												label='Email'
+												isRequired
+												labelPlacement='outside'
+												variant='bordered'
+												placeholder='Email'
+												classNames={{
+													inputWrapper:
+														'border-gray-400 bg-white border-1 p-8 text-black',
+													label: '!text-black pb-3',
+												}}
+												startContent={
+													<i className='bx bx-envelope bx-sm text-gray-500' />
+												}
+												{...field}
+											/>
+										</FormControl>
+										<p className='text-red-500'>{error.errorEmail}</p>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+						</div>
+
 						<FormField
 							control={signUpForm.control}
 							name='password'
@@ -311,9 +302,7 @@ export default function SignUp({ isLoginChange }: loginChangeProps) {
 							)}
 						/>
 
-						<div className='h-[0.5rem]'>
-							<p className='text-red-500 text-center w-full'>{error.formError}</p>
-						</div>
+						{error.formError}
 						<div className='w-full space-y-2'>
 							<Checkbox
 								className='w-full'

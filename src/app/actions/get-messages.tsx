@@ -19,11 +19,11 @@ interface messagesSchema {
 
 export default function getMessages({ conversationId }: any) {
 	const [messages, setMessages] = useState<messagesSchema[] | any>([]);
-	const [isLoading, setIsLoading] = useState<boolean>(true);
+	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [error, setError] = useState(null);
 
 	useEffect(() => {
-		const socketInstance: Socket = io('http://localhost:5000'); // Update the URL if needed
+		const socketInstance: Socket = io('http://localhost:5000');
 		const fetchMessages = async () => {
 			setIsLoading(true);
 

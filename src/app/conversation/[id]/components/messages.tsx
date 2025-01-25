@@ -11,6 +11,7 @@ import {
 	ScrollShadow,
 	Chip,
 	Skeleton,
+	Badge,
 } from '@nextui-org/react';
 import { TimeFormatter } from '@/app/utils/formatter';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
@@ -24,67 +25,30 @@ import { ReceiverProvider, useReceiver } from '@/context/receiver-context';
 import getMessages from '@/app/actions/get-messages';
 import SendMessageInput from './send-message';
 
-const items = [
-	{
-		key: 'sad',
-		label: '😀',
-	},
-	{
-		key: 'happy',
-		label: '😀',
-	},
-	{
-		key: 'angry',
-		label: '😀',
-	},
-	{
-		key: 'disgust',
-		label: '😀',
-	},
-];
-
-interface User {
+interface messagesSchema {
 	_id: string;
-	fullName: string;
-	profilePicture: string | null;
-	activeStatus: 'offline' | 'online' | 'away';
+	conversationId: string;
+	message: string;
+	senderId: string;
+	receiverId: string;
+	status: {
+		deliverd: boolean;
+		read: boolean;
+	};
+	createdAt: Date;
 }
-
-const messageSchema = z.object({
-	conversationId: z.string().optional(),
-	senderId: z.string(),
-	receiverId: z.string(),
-	mediaUrl: z.string().optional(),
-	message: z.string().min(1, { message: '' }).max(250),
-	messageType: z.string().optional(),
-});
 
 const ReceiverUser = () => {
 	const { receiverInfo } = useReceiver();
 
 	return (
-		<div className='flex items-center justify-between lg:p-5 p-3 border-b-1'>
+		<>
 			{receiverInfo ? (
-				<User
-					classNames={{
-						name: 'capitalize text-lg font-medium',
-					}}
-					avatarProps={{
-						size: 'lg',
-						src:
-							receiverInfo?.profilePicture ||
-							'https://i.pravatar.cc/150?u=a04258114e29026702d',
-					}}
-					description={
-						<Chip
-							className={`${
-								receiverInfo?.activeStatus === 'online'
-									? 'text-green-500'
-									: receiverInfo?.activeStatus === 'offline'
-									? 'text-red-500'
-									: 'text-orange-500'
-							} border-none capitalize`}
-							variant='dot'
+				<div className='flex items-center justify-between !text-white shadow-md pb-5'>
+					<div className='flex items-center h-[10%] gap-2 '>
+						<Badge
+							size='sm'
+							isOneChar
 							color={
 								receiverInfo?.activeStatus === 'online'
 									? 'success'
@@ -93,12 +57,39 @@ const ReceiverUser = () => {
 									: receiverInfo?.activeStatus === 'away'
 									? 'warning'
 									: 'default'
-							}>
-							{receiverInfo?.activeStatus}
-						</Chip>
-					}
-					name={receiverInfo?.fullName}
-				/>
+							}
+							placement='bottom-right'>
+							<Avatar
+								size='lg'
+								color={
+									receiverInfo?.activeStatus === 'online'
+										? 'success'
+										: receiverInfo?.activeStatus === 'offline'
+										? 'danger'
+										: receiverInfo?.activeStatus === 'away'
+										? 'warning'
+										: 'default'
+								}
+								radius='full'
+								src='https://avatar.iran.liara.run/public/4'
+							/>
+						</Badge>
+						<h1 className='text-xl text-start'>{receiverInfo?.fullName}</h1>
+					</div>
+
+					<div className='grid grid-cols-3 gap-2 '>
+						<div>
+							<i className='fa-solid fa-phone-volume rotate-[320deg] bg-blue-500 rounded-full p-4 text-xl hover:bg-blue-600 cursor-pointer duration-200' />
+						</div>
+						<div>
+							<i className='fa-solid fa-video bg-green-500 rounded-full p-4 text-xl hover:bg-green-600 cursor-pointer duration-200' />
+						</div>
+
+						<div>
+							<i className='fa-solid fa-ellipsis bg-white bg-opacity-10 rounded-full p-4 text-xl hover:bg-yellow-600 cursor-pointer duration-200' />
+						</div>
+					</div>
+				</div>
 			) : (
 				<div className='max-w-[300px] w-full flex items-center gap-3'>
 					<div>
@@ -110,19 +101,47 @@ const ReceiverUser = () => {
 					</div>
 				</div>
 			)}
-
-			<div className='flex items-center lg:gap-5 gap-1'>
-				<i className='bx bx-phone bx-sm cursor-pointer hover:text-gray-500 duration-200'></i>
-				<i className='bx bx-dots-horizontal-rounded bx-sm cursor-pointer hover:text-gray-300 duration-200'></i>
-			</div>
-		</div>
+		</>
 	);
 };
 
+const Loading = () => {
+	return (
+		<div className='h-full w-full flex flex-col items-end justify-end p-5'>
+			{Array.from({ length: 5 }).map((_, index) => (
+				<React.Fragment key={index}>
+					<div className='w-full flex items-end justify-end gap-3'>
+						<div className='w-1/3 flex items-center gap-2'>
+							<div className='w-full flex flex-col items-end gap-2'>
+								<Skeleton className='h-3 w-3/5 rounded-lg' />
+								<Skeleton className='h-3 w-4/5 rounded-lg' />
+							</div>
+							<div>
+								<Skeleton className='flex rounded-full w-12 h-12' />
+							</div>
+						</div>
+					</div>
+
+					<div className='w-full flex items-start justify-start gap-3'>
+						<div className='w-1/3 flex items-center gap-2'>
+							<div>
+								<Skeleton className='flex rounded-full w-12 h-12' />
+							</div>
+							<div className='w-full flex flex-col gap-2'>
+								<Skeleton className='h-3 w-3/5 rounded-lg' />
+								<Skeleton className='h-3 w-4/5 rounded-lg' />
+							</div>
+						</div>
+					</div>
+				</React.Fragment>
+			))}
+		</div>
+	);
+};
 const Messages = React.memo(({ userSessionId }: { userSessionId: string }) => {
 	const { receiverInfo, conversationId } = useReceiver();
 
-	const { messages, isLoading, error } = getMessages({ conversationId });
+	const { messages, isLoading } = getMessages({ conversationId });
 
 	const messageScrollRef = useRef<HTMLDivElement | null>(null);
 
@@ -133,103 +152,83 @@ const Messages = React.memo(({ userSessionId }: { userSessionId: string }) => {
 	}, [messages]);
 
 	if (isLoading) {
-		return (
-			<div className='h-full w-full flex flex-col items-end justify-end bg-white p-5'>
-				{Array.from({ length: 5 }).map((_, index) => (
-					<React.Fragment key={index}>
-						<div className='w-full flex items-end justify-end gap-3'>
-							<div className='w-1/3 flex items-center gap-2 bg-white'>
-								<div className='w-full flex flex-col items-end gap-2'>
-									<Skeleton className='h-3 w-3/5 rounded-lg' />
-									<Skeleton className='h-3 w-4/5 rounded-lg' />
-								</div>
-								<div>
-									<Skeleton className='flex rounded-full w-12 h-12' />
-								</div>
-							</div>
-						</div>
-
-						<div className='w-full flex items-start justify-start gap-3'>
-							<div className='w-1/3 flex items-center gap-2 bg-white'>
-								<div>
-									<Skeleton className='flex rounded-full w-12 h-12' />
-								</div>
-								<div className='w-full flex flex-col gap-2'>
-									<Skeleton className='h-3 w-3/5 rounded-lg' />
-									<Skeleton className='h-3 w-4/5 rounded-lg' />
-								</div>
-							</div>
-						</div>
-					</React.Fragment>
-				))}
-			</div>
-		);
+		return <Loading />;
 	}
 
 	return (
 		<ScrollShadow
 			ref={messageScrollRef}
 			hideScrollBar
-			className='convo-contents flex flex-col justify-end gap-2 w-full p-5 h-[100%] overflow-y-scroll lg:text-base text-xs'>
-			{messages?.length > 0 && !isLoading ? (
-				messages.map((messageItem: any) => {
-					const style = `${
-						messageItem.senderId === userSessionId
-							? 'sent-you flex items-end justify-end gap-2'
-							: 'received flex items-center gap-2'
-					}`;
+			size={5}
+			className='convo-contents flex flex-col gap-5 w-full h-full overflow-y-scroll p-3'>
+			<div className='flex justify-center w-full h-full p-5'>
+				<div className='flex flex-col items-center'>
+					<Avatar
+						size='lg'
+						color='success'
+						radius='full'
+						src='https://avatar.iran.liara.run/public/4'
+					/>
 
-					return (
-						<div
-							key={messageItem._id}
-							className={`group ${style} cursor-pointer`}>
-							{messageItem.senderId !== userSessionId && (
-								<div className='flex items-center gap-2'>
-									<Avatar
-										src='https://i.pravatar.cc/150?u=a042581f4e29026024d'
-										className='lg:size-12 w-[3.5rem] h-[2rem] '
-									/>
-									<div className='p-3 pl-5 pr-5 rounded-3xl  bg-blue-200'>
-										<p>{messageItem.message}</p>
-									</div>
-									<span className='group-hover:opacity-100 opacity-0 duration-200 text-gray-400 text-sm'>
-										{TimeFormatter(messageItem.updatedAt)}
-									</span>
-								</div>
-							)}
-
-							{messageItem.senderId === userSessionId && (
-								<div className='flex items-center gap-2'>
-									<div className='p-3 pl-5 pr-5 rounded-3xl order-last bg-gray-200'>
-										<p>{messageItem.message}</p>
-									</div>
-
-									<span className=' group-hover:opacity-100 opacity-0 duration-200 text-gray-400 text-sm'>
-										{TimeFormatter(messageItem.updatedAt)}
-									</span>
-								</div>
-							)}
-						</div>
-					);
-				})
-			) : (
-				<div className='w-full h-full flex justify-center p-10'>
-					<div className='flex flex-col gap-2 items-center'>
-						<Avatar
-							src={
-								receiverInfo?.profilePicture ||
-								'https://i.pravatar.cc/150?u=a042581f4e29026024d'
-							}
-							className='lg:size-20 w-[3.5rem] h-[2rem]'
-						/>
-						<h1 className='capitalize text-xl'>{receiverInfo?.fullName}</h1>
-
-						<div className='p-3 rounded-md bg-gray-200'>
-							Messages and calls are secured with end-to-end encryption. Learn More
-						</div>
-					</div>
+					<h1 className='text-white font-semibold text-2xl capitalize'>
+						{receiverInfo?.fullName}
+					</h1>
 				</div>
-			)}
+			</div>
+			{messages?.length > 0 && !isLoading
+				? messages.map((messageItem: any, index: number) => {
+						const isCurrentUser = messageItem.senderId === userSessionId;
+						const isPrevMessageFromSameSender =
+							index > 0 && messages[index - 1].senderId === messageItem.senderId;
+
+						return (
+							<React.Fragment key={messageItem._id}>
+								{!isCurrentUser ? (
+									!isPrevMessageFromSameSender ? (
+										<div className='flex items-end gap-3 justify-start'>
+											<Badge
+												size='sm'
+												isOneChar
+												color='success'
+												placement='bottom-right'>
+												<Avatar
+													size='sm'
+													color='success'
+													radius='full'
+													src='https://avatar.iran.liara.run/public/4'
+												/>
+											</Badge>
+
+											<div className='flex flex-col gap-2 justify-start'>
+												{messages
+													.filter(
+														(msg: messagesSchema, i: number) =>
+															msg.senderId === messageItem.senderId &&
+															i >= index,
+													)
+													.map((msg: messagesSchema) => (
+														<p
+															key={msg._id}
+															className='text-md text-white bg-gray-500 p-4 w-fit rounded-2xl rounded-bl-none'>
+															{msg.message}
+														</p>
+													))}
+											</div>
+										</div>
+									) : null
+								) : (
+									<div className='flex items-end gap-3 justify-end w-full h-fit'>
+										<div className='flex flex-col gap-2 justify-end'>
+											<p className='text-md text-white bg-gray-500 p-4 rounded-2xl rounded-br-none'>
+												{messageItem.message}
+											</p>
+										</div>
+									</div>
+								)}
+							</React.Fragment>
+						);
+				  })
+				: null}
 		</ScrollShadow>
 	);
 });
@@ -247,7 +246,7 @@ const MessagesContent = React.memo(({ receiverIdUrl }: any) => {
 			} else {
 				setReceiverIds(receiverIdUrl);
 			}
-			setLoading(false); // Set loading to false once done
+			setLoading(false);
 		};
 
 		fetchReceiverId();
@@ -262,21 +261,31 @@ const MessagesContent = React.memo(({ receiverIdUrl }: any) => {
 	);
 
 	if (isLoading) {
-		return <div>Loading....</div>;
+		return (
+			<div className='flex h-full w-[75%] bg-white bg-opacity-10 rounded-xl p-5'>
+				<Loading />
+			</div>
+		);
 	}
 
 	if (!receiverIds) {
-		return <div>No receiverId available</div>;
+		return (
+			<div className='flex items-center justify-center text-white w-full h-full bg-white bg-opacity-10 rounded-xl p-5'>
+				Start a conversation with a person.
+			</div>
+		);
 	}
 
 	return (
-		<div className='flex flex-col h-[100%] rounded-2xl border-1 shadow-lg'>
-			<ReceiverProvider receiverId={receiverIds}>
+		<ReceiverProvider receiverId={receiverIds}>
+			<div className='flex flex-col h-full w-[75%] bg-white bg-opacity-10 rounded-xl p-5'>
 				<ReceiverUser />
 				<Messages {...memoizedIdProps} />
-				<SendMessageInput {...memoizedIdProps} />
-			</ReceiverProvider>
-		</div>
+				<div className='w-full'>
+					<SendMessageInput {...memoizedIdProps} />
+				</div>
+			</div>
+		</ReceiverProvider>
 	);
 });
 

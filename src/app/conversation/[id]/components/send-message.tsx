@@ -112,18 +112,18 @@ export default function SendMessageInput({ userSessionId, receiverId }: SendMess
 									{...field}
 									classNames={{
 										inputWrapper:
-											'w-full h-fit p-5 rounded-3xl bg-white bg-opacity-10 group-hover:bg-opacity-20 ',
+											'w-full h-fit p-5 rounded-3xl   border-[1px] border-color ',
 										input: 'text-lg',
 									}}
 									startContent={
-										<i className='fa-solid fa-paperclip fa-lg text-white mr-3 '></i>
+										<i className='fa-solid fa-paperclip fa-lg  mr-3 '></i>
 									}
 									endContent={
 										<>
 											{message ? (
-												<i className='fa-regular fa-paper-plane fa-lg fa-2xl text-blue-500'></i>
+												<i className='fa-regular fa-paper-plane fa-lg  text-blue-500'></i>
 											) : (
-												<i className='fa-solid fa-thumbs-up fa-2xl text-blue-500'></i>
+												<i className='fa-solid fa-thumbs-up fa-xl text-blue-500'></i>
 											)}
 										</>
 									}

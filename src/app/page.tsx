@@ -23,7 +23,7 @@ export default function Home() {
 				</div>
 			</header>
 			<main className='flex justify-center items-center w-full h-full'>
-				<div className='rounded-2xl lg:w-1/2 w-full border-0 border-black bg-white overflow-hidden'>
+				<div className='rounded-2xl lg:w-1/2 w-full border-0 border-black  overflow-hidden'>
 					<AnimatePresence mode='wait'>
 						{isLogin ? (
 							<motion.section

@@ -1,6 +1,6 @@
 'use client';
 import MessagesContent from './components/messages';
-import Layout from '../components/layout';
+import Layout from '../../components/layout/layout';
 import { useParams } from 'next/navigation';
 import React from 'react';
 

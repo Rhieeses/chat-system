@@ -138,3 +138,9 @@ h1 {
 		@apply bg-background text-foreground;
 	}
 }
+
+@layer components {
+	.border-light {
+		@apply border-gray-300;
+	}
+}

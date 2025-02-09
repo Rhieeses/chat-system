@@ -63,7 +63,7 @@ const ConvoCard = ({ search }: { search: string }) => {
 								setReceiverId(userId);
 								handleUrlChange(userId);
 							}}
-							className='flex items-center gap-4 w-full h-fit p-5 bg-white bg-opacity-10 rounded-2xl hover:bg-opacity-30 duration-200 cursor-pointer'>
+							className={`flex items-center gap-4 w-full h-fit p-3 rounded-2xl duration-200 cursor-pointer bg-gray-300/50`}>
 							<Badge
 								size='sm'
 								isOneChar
@@ -72,7 +72,7 @@ const ConvoCard = ({ search }: { search: string }) => {
 								<Avatar
 									size='lg'
 									color='success'
-									radius='full'
+									radius='lg'
 									src={
 										convoItem.participants[0].user.profilePicture ||
 										'https://i.pravatar.cc/150?u=a042581f4e29026024d'
@@ -80,10 +80,10 @@ const ConvoCard = ({ search }: { search: string }) => {
 								/>
 							</Badge>
 							<div className='w-full'>
-								<h2 className='text-lg font-[400] tracking-wide text-white'>
+								<h2 className='text-md font-[500] capitalize'>
 									{convoItem.participants[0].user.fullName}
 								</h2>
-								<p className='text-sm text-gray-300 truncate max-w-[80%]'>
+								<p className='text-sm text-gray-500 truncate max-w-[80%]'>
 									{convoItem.lastMessage.message}
 								</p>
 							</div>
@@ -97,20 +97,17 @@ const ConvoCard = ({ search }: { search: string }) => {
 const Sidebar = React.memo(() => {
 	const [search, setSearch] = useState('');
 	return (
-		<aside className='flex flex-col gap-5 w-[25%] h-full'>
-			<div className='flex items-center text-white'>
-				<h2 className='font-semibold text-2xl text-center text-white'>Messages</h2>
+		<aside className='flex flex-col gap-5 w-[25%] h-full border-r-[1px] border-color p-5'>
+			<div className='flex items-center '>
+				<h2 className='font-semibold text-2xl text-center '>Messages</h2>
 			</div>
 			<Input
 				value={search}
 				onChange={(e) => setSearch(e.target.value)}
 				classNames={{
-					inputWrapper:
-						'w-full h-fit p-5 rounded-full bg-white bg-opacity-10 group-hover:bg-opacity-20 focus:bg-opacity-0',
+					inputWrapper: 'w-full h-fit p-5 rounded-xl border-[1px] border-color bg-white',
 				}}
-				startContent={
-					<i className='fa-solid fa-magnifying-glass fa-lg text-white mr-3'></i>
-				}
+				startContent={<i className='fa-solid fa-magnifying-glass fa-lg  mr-3'></i>}
 				placeholder='Search'
 			/>
 			<ScrollShadow

@@ -109,7 +109,7 @@ export default function Login({ isLoginChange }: loginChangeProps) {
 										variant='bordered'
 										placeholder='Email'
 										classNames={{
-											inputWrapper: 'border-gray-400 bg-white border-1 p-8',
+											inputWrapper: 'border-gray-400  border-1 p-8',
 											label: 'text-3xl',
 										}}
 										startContent={
@@ -148,7 +148,7 @@ export default function Login({ isLoginChange }: loginChangeProps) {
 												} bx-sm text-gray-600 cursor-pointer`}></i>
 										}
 										classNames={{
-											inputWrapper: 'border-gray-400 bg-white border-1 p-8',
+											inputWrapper: 'border-gray-400  border-1 p-8',
 											label: 'text-3xl',
 										}}
 										{...field}
@@ -183,7 +183,7 @@ export default function Login({ isLoginChange }: loginChangeProps) {
 									} `}
 								/>
 							}
-							className='bg-black text-white w-full font-bold p-9'>
+							className='bg-black  w-full font-bold p-9'>
 							Log in
 						</Button>
 

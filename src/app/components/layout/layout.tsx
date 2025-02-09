@@ -11,12 +11,12 @@ interface LayoutProps {
 export default function Layout({ children }: LayoutProps) {
 	return (
 		<UserProvider>
-			<div className='flex gap-5 bg-black h-screen w-screen p-7'>
+			<div className='flex h-screen w-screen'>
 				<Sidebar />
-				<div className='flex flex-col w-full'>
-					<Header />
-					<div className='flex gap-5 h-[90%]'>
-						{children}
+				<div className='flex w-full'>
+					{children}
+					<div className='flex flex-col gap-5 w-[25%]'>
+						<Header />
 						<RightSideBar />
 					</div>
 				</div>

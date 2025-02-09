@@ -94,7 +94,7 @@ const SuggestionCard = () => {
 								<Button
 									isIconOnly
 									onPress={() => handleSuggestion(user._id)}
-									className='bg-white'>
+									className=''>
 									<i className='bx bxs-message-dots bx-sm '></i>
 								</Button>
 								<Button

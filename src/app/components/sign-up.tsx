@@ -154,7 +154,7 @@ export default function SignUp({ isLoginChange }: loginChangeProps) {
 											placeholder='Full name'
 											classNames={{
 												inputWrapper:
-													'border-gray-400 bg-white border-1 p-8 text-black',
+													'border-gray-400  border-1 p-8 text-black',
 												label: '!text-black pb-3',
 											}}
 											startContent={
@@ -184,7 +184,7 @@ export default function SignUp({ isLoginChange }: loginChangeProps) {
 												placeholder='Username'
 												classNames={{
 													inputWrapper:
-														'border-gray-400 bg-white border-1 p-8 text-black',
+														'border-gray-400  border-1 p-8 text-black',
 													label: '!text-black pb-3',
 												}}
 												startContent={
@@ -216,7 +216,7 @@ export default function SignUp({ isLoginChange }: loginChangeProps) {
 												placeholder='Email'
 												classNames={{
 													inputWrapper:
-														'border-gray-400 bg-white border-1 p-8 text-black',
+														'border-gray-400  border-1 p-8 text-black',
 													label: '!text-black pb-3',
 												}}
 												startContent={
@@ -258,7 +258,7 @@ export default function SignUp({ isLoginChange }: loginChangeProps) {
 											}
 											classNames={{
 												inputWrapper:
-													'border-gray-400 bg-white border-1 p-8 text-black',
+													'border-gray-400  border-1 p-8 text-black',
 												label: '!text-black pb-3',
 											}}
 											startContent={
@@ -288,7 +288,7 @@ export default function SignUp({ isLoginChange }: loginChangeProps) {
 											labelPlacement='outside'
 											classNames={{
 												inputWrapper:
-													'border-gray-400 bg-white border-1 p-8 text-black',
+													'border-gray-400  border-1 p-8 text-black',
 												label: '!text-black pb-3',
 											}}
 											startContent={
@@ -333,7 +333,7 @@ export default function SignUp({ isLoginChange }: loginChangeProps) {
 									endContent={
 										<i className='bx bx-right-arrow-alt bx-sm mt-2'></i>
 									}
-									className='bg-blue-700 text-white w-full font-bold p-9'>
+									className='bg-blue-700  w-full font-bold p-9'>
 									Sign up
 								</Button>
 							</div>

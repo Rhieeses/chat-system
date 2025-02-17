@@ -39,19 +39,6 @@ export const MessagesHeader = () => {
 						</Badge>
 						<h1 className='capitalize text-xl text-start'>{receiverInfo?.fullName}</h1>
 					</div>
-
-					<div className='grid grid-cols-3 gap-2 '>
-						<div>
-							<i className='fa-solid fa-phone-volume rotate-[320deg] rounded-full p-4 text-xl hover:text-blue-600 cursor-pointer duration-200' />
-						</div>
-						<div>
-							<i className='fa-solid fa-video rounded-full p-4 text-xl hover:text-green-600 cursor-pointer duration-200' />
-						</div>
-
-						<div>
-							<i className='fa-solid fa-ellipsis rounded-full p-4 text-xl hover:text-yellow-600 cursor-pointer duration-200' />
-						</div>
-					</div>
 				</div>
 			) : (
 				<div className='max-w-[300px] w-full flex items-center gap-3'>

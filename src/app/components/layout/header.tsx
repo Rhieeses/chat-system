@@ -7,18 +7,33 @@ import {
 	DropdownItem,
 	Avatar,
 	Badge,
-	User,
 } from '@nextui-org/react';
 import AddUserModal from '../../conversation/components/add-modal';
 import { useUser } from '@/context/user-context';
-
+import { useRouter } from 'next/navigation';
+import Cookies from 'js-cookie';
+import axios from 'axios';
 const Header = () => {
 	const { user } = useUser();
+	const router = useRouter();
 
 	const [isAddUserOpen, setIsAddUserOpen] = useState<boolean>(false);
 
 	const handleOpenAdd = (value: boolean) => {
 		setIsAddUserOpen(value);
+	};
+
+	const handleLogout = async () => {
+		try {
+			Cookies.remove('user');
+			const response = await axios.post('/api/auth/logout');
+
+			if (response.status === 200) {
+				router.push('/');
+			}
+		} catch (error) {
+			console.error('Error', error);
+		}
 	};
 	return (
 		<header className='flex items-start w-full border-b-[1px] border-color'>
@@ -35,18 +50,25 @@ const Header = () => {
 				</div>
 
 				<Dropdown placement='bottom-end'>
-					<Badge
-						size='sm'
-						isOneChar
-						color='success'
-						placement='bottom-right'>
-						<Avatar
-							size='lg'
-							color='success'
-							radius='full'
-							src={user?.profilePicture || 'https://avatar.iran.liara.run/public/4'}
-						/>
-					</Badge>
+					<DropdownTrigger>
+						<button>
+							<Badge
+								size='sm'
+								isOneChar
+								color='success'
+								placement='bottom-right'>
+								<Avatar
+									size='lg'
+									color='success'
+									radius='full'
+									src={
+										user?.profilePicture ||
+										'https://avatar.iran.liara.run/public/4'
+									}
+								/>
+							</Badge>
+						</button>
+					</DropdownTrigger>
 
 					<DropdownMenu
 						aria-label='Profile Actions'
@@ -67,6 +89,7 @@ const Header = () => {
 							<span>Help & Feedback</span>
 						</DropdownItem>
 						<DropdownItem
+							onClick={handleLogout}
 							key='logout'
 							color='danger'
 							className='border-t-1 rounded-t-none'

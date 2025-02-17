@@ -29,6 +29,23 @@ export const SignUp = async (req: Request, res: Response): Promise<Response | an
 	}
 };
 
+export const Logout = async (req: Request, res: Response): Promise<Response | any> => {
+	try {
+		res.cookie('token', '', {
+			maxAge: 0,
+			path: '/',
+			httpOnly: true,
+			secure: process.env.NODE_ENV === 'production',
+			sameSite: 'strict',
+		});
+
+		res.status(200).json({ message: 'Logged out successfully' });
+	} catch (error) {
+		console.error('Error during logout:', error);
+		res.status(500).json({ error: 'Something went wrong during logout' });
+	}
+};
+
 export const LogIn = async (req: Request, res: Response): Promise<Response | any> => {
 	try {
 		const { email, password } = req.body;

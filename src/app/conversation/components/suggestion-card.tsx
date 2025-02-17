@@ -15,7 +15,6 @@ interface User {
 const SuggestionCard = () => {
 	const { user } = useUser();
 	const router = useRouter();
-	const [isAdded, setisAdded] = useState<boolean>(false);
 	const [suggestions, setSuggetion] = useState<User[] | null>([]);
 	const [loading, setLoading] = useState<boolean>(false);
 	const [limit, setLimit] = useState<number>(5);
@@ -94,21 +93,8 @@ const SuggestionCard = () => {
 								<Button
 									isIconOnly
 									onPress={() => handleSuggestion(user._id)}
-									className=''>
-									<i className='bx bxs-message-dots bx-sm '></i>
-								</Button>
-								<Button
-									className={
-										isAdded
-											? 'bg-transparent text-foreground border-default-200'
-											: ''
-									}
-									color='primary'
-									radius='full'
-									size='sm'
-									variant={isAdded ? 'bordered' : 'solid'}
-									onPress={() => setisAdded(!isAdded)}>
-									{isAdded ? 'Cancel friend request' : 'Add friend'}
+									variant='flat'>
+									<i className='bx bxs-message-dots bx-sm text-blue-500'></i>
 								</Button>
 							</div>
 						</CardHeader>

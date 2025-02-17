@@ -183,7 +183,7 @@ export default function Login({ isLoginChange }: loginChangeProps) {
 									} `}
 								/>
 							}
-							className='bg-black  w-full font-bold p-9'>
+							className='bg-black  w-full font-bold p-9 text-white'>
 							Log in
 						</Button>
 
